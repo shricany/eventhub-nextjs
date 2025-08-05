@@ -64,8 +64,22 @@ async function addComment(req, res, eventId) {
       return res.status(403).json({ message: 'Only students can comment' });
     }
 
+    // Check if event exists
+    const eventExists = await db.getEventById(eventId);
+    console.log('Event exists:', !!eventExists);
+    if (!eventExists) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    
+    // Check if student exists
+    const studentExists = await db.findStudentById(studentId);
+    console.log('Student exists:', !!studentExists);
+    if (!studentExists) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
     console.log('Creating comment with:', {
-      event_id: parseInt(eventId),
+      event_id: eventId,
       student_id: studentId,
       comment: comment.trim()
     });
