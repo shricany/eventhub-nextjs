@@ -33,16 +33,36 @@ async function getComments(req, res, eventId) {
 
 async function addComment(req, res, eventId) {
   try {
+    console.log('=== ADD COMMENT DEBUG ===');
+    console.log('EventId:', eventId);
+    console.log('Request body:', req.body);
+    console.log('User:', req.user);
+    
     const { comment } = req.body;
+    
+    if (!req.user) {
+      console.log('ERROR: No user found in request');
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+    
     const studentId = req.user.id;
+    console.log('Student ID:', studentId);
 
     if (!comment || comment.trim().length === 0) {
+      console.log('ERROR: Empty comment');
       return res.status(400).json({ message: 'Comment cannot be empty' });
     }
 
     if (req.user.username) {
+      console.log('ERROR: Admin trying to comment');
       return res.status(403).json({ message: 'Only students can comment' });
     }
+
+    console.log('Creating comment with:', {
+      event_id: parseInt(eventId),
+      student_id: studentId,
+      comment: comment.trim()
+    });
 
     const newComment = await db.createComment({
       event_id: parseInt(eventId),
@@ -50,9 +70,11 @@ async function addComment(req, res, eventId) {
       comment: comment.trim()
     });
 
+    console.log('Comment created successfully:', newComment);
     res.status(201).json(newComment);
   } catch (error) {
     console.error('Add comment error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 }
