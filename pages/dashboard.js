@@ -31,7 +31,8 @@ export default function Dashboard() {
   const fetchAdminEvents = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/events/admin', {
+      // Fetch ALL events for admin to see and manage
+      const response = await fetch('/api/events', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -54,6 +55,32 @@ export default function Dashboard() {
       setEvents([]);
     }
     setLoading(false);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/events/delete?eventId=${eventId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        alert('Event deleted successfully!');
+        fetchAdminEvents(); // Refresh the events list
+        setSelectedEvent(null); // Clear selection
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to delete event');
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      alert('Error deleting event');
+    }
   };
 
   const fetchParticipants = async (eventId) => {
@@ -115,7 +142,7 @@ export default function Dashboard() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '40px', height: '75vh' }}>
             <div style={{ background: 'white', borderRadius: '20px', padding: '30px', boxShadow: '0 20px 60px rgba(0,0,0,0.08)', overflowY: 'auto' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1a202c', marginBottom: '25px' }}>
-                Your Events ({events.length})
+                All Events ({events.length})
               </h2>
 
               {events.length === 0 ? (
@@ -150,13 +177,34 @@ export default function Dashboard() {
                       <p style={{ margin: '4px 0', fontSize: '0.9rem', opacity: 0.8 }}>
                         📍 {event.location}
                       </p>
-                      <div style={{ display: 'flex', gap: '15px', marginTop: '12px' }}>
-                        <span style={{ fontSize: '11px', background: selectedEvent?.id === event.id ? 'rgba(255,255,255,0.2)' : 'rgba(102, 126, 234, 0.1)', color: selectedEvent?.id === event.id ? 'white' : '#667eea', padding: '4px 10px', borderRadius: '12px', fontWeight: '600' }}>
-                          👥 {event.interested_count || 0} Interested
-                        </span>
-                        <span style={{ fontSize: '11px', background: selectedEvent?.id === event.id ? 'rgba(255,255,255,0.2)' : 'rgba(102, 126, 234, 0.1)', color: selectedEvent?.id === event.id ? 'white' : '#667eea', padding: '4px 10px', borderRadius: '12px', fontWeight: '600' }}>
-                          ✅ {event.participants_count || 0} Joined
-                        </span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <span style={{ fontSize: '11px', background: selectedEvent?.id === event.id ? 'rgba(255,255,255,0.2)' : 'rgba(102, 126, 234, 0.1)', color: selectedEvent?.id === event.id ? 'white' : '#667eea', padding: '4px 10px', borderRadius: '12px', fontWeight: '600' }}>
+                            👥 {event.interested_count || 0} Interested
+                          </span>
+                          <span style={{ fontSize: '11px', background: selectedEvent?.id === event.id ? 'rgba(255,255,255,0.2)' : 'rgba(102, 126, 234, 0.1)', color: selectedEvent?.id === event.id ? 'white' : '#667eea', padding: '4px 10px', borderRadius: '12px', fontWeight: '600' }}>
+                            ✅ {event.participants_count || 0} Joined
+                          </span>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteEvent(event.id);
+                          }}
+                          style={{
+                            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '4px 8px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            opacity: selectedEvent?.id === event.id ? 1 : 0.8
+                          }}
+                        >
+                          🗑️ Delete
+                        </button>
                       </div>
                     </div>
                   ))}
