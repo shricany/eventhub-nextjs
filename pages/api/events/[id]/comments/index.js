@@ -1,5 +1,5 @@
-import { db, initDatabase } from '../../../../lib/db-postgres';
-import { requireAuth } from '../../../../lib/auth';
+import { db, initDatabase } from '../../../../../lib/db-postgres';
+import { requireAuth } from '../../../../../lib/auth';
 
 let dbInitialized = false;
 
