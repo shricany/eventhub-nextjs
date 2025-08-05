@@ -18,10 +18,15 @@ export default async function handler(req, res) {
 
 async function deleteEvent(req, res) {
   try {
+    console.log('=== DELETE EVENT DEBUG ===');
+    console.log('User:', JSON.stringify(req.user, null, 2));
+    console.log('Query:', req.query);
+    
     const { eventId } = req.query;
     const adminId = req.user.id;
 
     if (!req.user.username) {
+      console.log('ERROR: User has no username field');
       return res.status(403).json({ message: 'Only admins can delete events' });
     }
 
