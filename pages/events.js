@@ -117,7 +117,10 @@ export default function EventsPage() {
 
       if (response.ok) {
         setNewComment(prev => ({ ...prev, [eventId]: '' }));
-        fetchComments(eventId);
+        // Wait a moment then refresh comments
+        setTimeout(() => {
+          fetchComments(eventId);
+        }, 500);
         alert('Comment added successfully!');
       } else {
         const errorData = await response.json();
@@ -126,6 +129,33 @@ export default function EventsPage() {
     } catch (error) {
       console.error('Error adding comment:', error);
       alert('Error adding comment');
+    }
+  };
+
+  const handleDeleteComment = async (commentId, eventId) => {
+    if (!confirm('Are you sure you want to delete this comment?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/events/comments/delete?commentId=${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Comment deleted successfully!');
+        fetchComments(eventId);
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to delete comment');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      alert('Error deleting comment');
     }
   };
 
@@ -307,9 +337,28 @@ export default function EventsPage() {
                                     {comment.department} - Year {comment.year}
                                   </span>
                                 </div>
-                                <span style={{ color: '#64748b', fontSize: '12px' }}>
-                                  {new Date(comment.created_at).toLocaleDateString()}
-                                </span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{ color: '#64748b', fontSize: '12px' }}>
+                                    {new Date(comment.created_at).toLocaleDateString()}
+                                  </span>
+                                  {user && user.username && (
+                                    <button
+                                      onClick={() => handleDeleteComment(comment.id, event.id)}
+                                      style={{
+                                        background: '#ef4444',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        padding: '4px 8px',
+                                        fontSize: '10px',
+                                        fontWeight: '600',
+                                        cursor: 'pointer'
+                                      }}
+                                    >
+                                      🗑️ Delete
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                               <p style={{ margin: 0, color: '#374151', fontSize: '14px', lineHeight: '1.5' }}>
                                 {comment.comment}

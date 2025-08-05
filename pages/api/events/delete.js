@@ -29,15 +29,13 @@ async function deleteEvent(req, res) {
       return res.status(400).json({ message: 'Event ID is required' });
     }
 
-    // Check if event exists and belongs to admin
+    // Check if event exists
     const event = await db.getEventById(parseInt(eventId));
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    if (event.admin_id !== adminId) {
-      return res.status(403).json({ message: 'You can only delete your own events' });
-    }
+    // Admin can delete any event (no ownership check)
 
     // Delete event (this will cascade delete participations due to foreign key)
     await db.deleteEvent(parseInt(eventId));
