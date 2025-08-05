@@ -2,6 +2,8 @@
 
 A modern, AI-powered campus event management system built with Next.js and deployed on Vercel.
 
+<!-- Deployed with Neon Postgres database -->
+
 ## 🚀 Quick Start
 
 ### Prerequisites
