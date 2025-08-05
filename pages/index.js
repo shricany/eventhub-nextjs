@@ -139,31 +139,137 @@ export default function LandingPage() {
               Built with passion for improving campus life
             </p>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '50px', flexWrap: 'wrap' }}>
-              <div style={{ textAlign: 'center' }}>
-                <img 
-                  src="/images/founder.jpeg" 
-                  alt="Founder" 
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: '5px solid #667eea',
-                    boxShadow: '0 20px 60px rgba(102, 126, 234, 0.3)',
-                    marginBottom: '20px'
-                  }}
-                />
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1a202c', marginBottom: '8px' }}>
-                  Shrikant Davange
-                </h3>
-                <p style={{ color: '#667eea', fontWeight: '600', marginBottom: '15px' }}>
-                  Founder & Developer
-                </p>
-                <p style={{ color: '#64748b', lineHeight: '1.6', maxWidth: '400px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '60px', flexWrap: 'wrap' }}>
+              <div style={{ 
+                position: 'relative',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                padding: '30px',
+                borderRadius: '25px',
+                boxShadow: '0 30px 80px rgba(102, 126, 234, 0.4)',
+                transform: 'rotate(-2deg)',
+                maxWidth: '400px'
+              }}>
+                <div style={{
+                  background: 'white',
+                  padding: '20px',
+                  borderRadius: '15px',
+                  transform: 'rotate(2deg)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                }}>
+                  <img 
+                    src="/images/founder.jpeg" 
+                    alt="Founder" 
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '10px',
+                      display: 'block'
+                    }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '-10px',
+                    right: '-10px',
+                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                    color: 'white',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    boxShadow: '0 5px 15px rgba(251, 191, 36, 0.4)'
+                  }}>
+                    ✨ FOUNDER
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{ textAlign: 'left', maxWidth: '500px' }}>
+                <div style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  fontSize: '3rem',
+                  fontWeight: '900',
+                  marginBottom: '10px',
+                  lineHeight: '1.1'
+                }}>
+                  Venkat Swamy
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  marginBottom: '25px'
+                }}>
+                  <span style={{
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: 'white',
+                    padding: '6px 16px',
+                    borderRadius: '20px',
+                    fontSize: '14px',
+                    fontWeight: '600'
+                  }}>
+                    💻 Founder & Developer
+                  </span>
+                  <span style={{
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    color: 'white',
+                    padding: '6px 16px',
+                    borderRadius: '20px',
+                    fontSize: '14px',
+                    fontWeight: '600'
+                  }}>
+                    🎓 CS Student
+                  </span>
+                </div>
+                
+                <p style={{ 
+                  color: '#64748b', 
+                  lineHeight: '1.8', 
+                  fontSize: '1.1rem',
+                  marginBottom: '25px'
+                }}>
                   Computer Science student passionate about creating solutions that bring campus communities together. 
                   EventHub was born from the vision of making campus events more accessible and engaging for everyone.
                 </p>
+                
+                <div style={{
+                  display: 'flex',
+                  gap: '15px',
+                  flexWrap: 'wrap'
+                }}>
+                  <div style={{
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                    padding: '12px 20px',
+                    borderRadius: '15px',
+                    border: '2px solid #e2e8f0',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#667eea' }}>2024</div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>FOUNDED</div>
+                  </div>
+                  <div style={{
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                    padding: '12px 20px',
+                    borderRadius: '15px',
+                    border: '2px solid #e2e8f0',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#667eea' }}>500+</div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>EVENTS</div>
+                  </div>
+                  <div style={{
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                    padding: '12px 20px',
+                    borderRadius: '15px',
+                    border: '2px solid #e2e8f0',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#667eea' }}>2K+</div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>USERS</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
