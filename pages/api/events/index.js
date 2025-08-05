@@ -1,8 +1,16 @@
-import { db } from '../../../lib/db-postgres';
+import { db, initDatabase } from '../../../lib/db-postgres';
 import { requireAuth } from '../../../lib/auth';
+
+let dbInitialized = false;
 
 async function getEvents(req, res) {
   try {
+    // Initialize database on first API call
+    if (!dbInitialized) {
+      await initDatabase();
+      dbInitialized = true;
+    }
+    
     const events = await db.getAllEvents();
     res.status(200).json(events);
   } catch (error) {
