@@ -4,10 +4,12 @@ import { requireAuth } from '../../../lib/auth';
 let dbInitialized = false;
 
 export default async function handler(req, res) {
-  // Initialize database on first API call
-  if (!dbInitialized) {
+  // Force database initialization every time to ensure comments table exists
+  try {
     await initDatabase();
-    dbInitialized = true;
+    console.log('Database initialized for comments API');
+  } catch (error) {
+    console.error('Database init error:', error);
   }
   
   const eventId = parseInt(req.query.eventId);
