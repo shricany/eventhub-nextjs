@@ -52,7 +52,7 @@ async function addComment(req, res, eventId) {
     }
     
     const studentId = req.user.id;
-    console.log('Student ID:', studentId);
+    console.log('Student ID:', studentId, 'Type:', typeof studentId);
 
     if (!comment || comment.trim().length === 0) {
       console.log('ERROR: Empty comment');
@@ -64,17 +64,26 @@ async function addComment(req, res, eventId) {
       return res.status(403).json({ message: 'Only students can comment' });
     }
 
-    // Skip validation for now - just create comment
+    // Validate IDs are numbers
+    const validEventId = parseInt(eventId);
+    const validStudentId = parseInt(studentId);
+    
+    console.log('Parsed IDs:', { validEventId, validStudentId });
+    
+    if (isNaN(validEventId) || isNaN(validStudentId)) {
+      console.log('ERROR: Invalid IDs - eventId:', validEventId, 'studentId:', validStudentId);
+      return res.status(400).json({ message: 'Invalid event or student ID' });
+    }
 
     console.log('Creating comment with:', {
-      event_id: parseInt(eventId),
-      student_id: studentId,
+      event_id: validEventId,
+      student_id: validStudentId,
       comment: comment.trim()
     });
 
     const newComment = await db.createComment({
-      event_id: parseInt(eventId),
-      student_id: studentId,
+      event_id: validEventId,
+      student_id: validStudentId,
       comment: comment.trim()
     });
 
