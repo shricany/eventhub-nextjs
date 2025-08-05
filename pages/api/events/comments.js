@@ -10,7 +10,11 @@ export default async function handler(req, res) {
     dbInitialized = true;
   }
   
-  const { eventId } = req.query;
+  const eventId = parseInt(req.query.eventId);
+  
+  if (!eventId || isNaN(eventId)) {
+    return res.status(400).json({ message: 'Valid eventId is required' });
+  }
 
   if (req.method === 'GET') {
     return getComments(req, res, eventId);
@@ -23,7 +27,7 @@ export default async function handler(req, res) {
 
 async function getComments(req, res, eventId) {
   try {
-    const comments = await db.getEventComments(parseInt(eventId));
+    const comments = await db.getEventComments(eventId);
     res.status(200).json(comments);
   } catch (error) {
     console.error('Get comments error:', error);
@@ -65,7 +69,7 @@ async function addComment(req, res, eventId) {
     });
 
     const newComment = await db.createComment({
-      event_id: parseInt(eventId),
+      event_id: eventId,
       student_id: studentId,
       comment: comment.trim()
     });
