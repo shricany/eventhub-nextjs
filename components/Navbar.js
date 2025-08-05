@@ -7,6 +7,7 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -24,6 +25,7 @@ const Navbar = () => {
     setUser(null);
     setIsLoggedIn(false);
     setShowProfile(false);
+    setIsMobileMenuOpen(false);
     router.push('/');
   };
 
@@ -31,12 +33,16 @@ const Navbar = () => {
     setShowProfile(!showProfile);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const getUserType = () => {
     return user?.username ? 'Admin' : 'Student';
   };
 
   const getUserAvatar = () => {
-    return user?.username ? '👨‍💼' : '👨‍🎓';
+    return user?.username ? '👨💼' : '👨🎓';
   };
 
   return (
@@ -68,7 +74,30 @@ const Navbar = () => {
           EventHub
         </Link>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleMobileMenu}
+          style={{
+            display: 'none',
+            '@media (max-width: 768px)': { display: 'block' },
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            fontSize: '1.5rem',
+            cursor: 'pointer'
+          }}
+          className="mobile-menu-btn"
+        >
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </button>
+        
+        {/* Desktop Menu */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '30px',
+          '@media (max-width: 768px)': { display: 'none' }
+        }} className="desktop-menu">
           <Link href="/" style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'none', fontWeight: '500', transition: 'color 0.3s ease' }}>
             Home
           </Link>
@@ -219,6 +248,122 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderTop: '1px solid rgba(255,255,255,0.2)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px'
+        }} className="mobile-menu">
+          <Link href="/" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+            Home
+          </Link>
+          <Link href="/events" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+            Events
+          </Link>
+          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+            About
+          </Link>
+          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+            Contact
+          </Link>
+          
+          {!isLoggedIn ? (
+            <>
+              <Link href="/student-registration" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+                Student Login
+              </Link>
+              <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} style={{ 
+                background: 'rgba(255,255,255,0.2)', 
+                color: 'white', 
+                padding: '12px 16px', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                fontWeight: '600',
+                border: '1px solid rgba(255,255,255,0.3)',
+                textAlign: 'center'
+              }}>
+                Admin Portal
+              </Link>
+            </>
+          ) : (
+            <>
+              {user?.username ? (
+                <>
+                  <Link href="/create-event" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+                    Create Event
+                  </Link>
+                  <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+                    Dashboard
+                  </Link>
+                </>
+              ) : (
+                <Link href="/my-events" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontWeight: '500', padding: '10px 0' }}>
+                  My Events
+                </Link>
+              )}
+              
+              <div style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '15px', 
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>{getUserAvatar()}</span>
+                <div>
+                  <div style={{ color: 'white', fontWeight: '600' }}>{user?.name || user?.username}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>{getUserType()}</div>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: 'rgba(239, 68, 68, 0.9)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                🚪 Logout
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .desktop-menu {
+            display: none !important;
+          }
+          .mobile-menu-btn {
+            display: block !important;
+          }
+        }
+        @media (min-width: 769px) {
+          .mobile-menu-btn {
+            display: none !important;
+          }
+        }
+      `}</style>
     </nav>
   );
 };
