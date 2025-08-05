@@ -1,9 +1,9 @@
-import { db } from '../../../lib/db-memory';
+import { db } from '../../../lib/db-postgres';
 import { requireAuth } from '../../../lib/auth';
 
 async function getEvents(req, res) {
   try {
-    const events = db.getAllEvents();
+    const events = await db.getAllEvents();
     res.status(200).json(events);
   } catch (error) {
     console.error('Get events error:', error);
@@ -20,7 +20,7 @@ async function createEvent(req, res) {
     }
 
     // Create event
-    const event = db.createEvent({
+    const event = await db.createEvent({
       name,
       date,
       time,

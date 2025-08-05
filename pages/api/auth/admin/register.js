@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { hashPassword, generateToken } from '../../../../lib/auth';
 
 export default async function handler(req, res) {
@@ -14,7 +14,10 @@ export default async function handler(req, res) {
     }
 
     // Check if admin already exists
-    if (db.findAdminByEmail(email) || db.findAdminByUsername(username)) {
+    const existingEmail = await db.findAdminByEmail(email);
+    const existingUsername = await db.findAdminByUsername(username);
+    
+    if (existingEmail || existingUsername) {
       return res.status(400).json({ message: 'Admin already exists' });
     }
 
@@ -22,7 +25,7 @@ export default async function handler(req, res) {
     const hashedPassword = hashPassword(password);
 
     // Create admin
-    const admin = db.createAdmin({
+    const admin = await db.createAdmin({
       username,
       email,
       password: hashedPassword

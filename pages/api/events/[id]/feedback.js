@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { requireAuth } from '../../../../lib/auth';
 
 async function submitFeedback(req, res) {
@@ -7,10 +7,10 @@ async function submitFeedback(req, res) {
     const studentId = req.user.id;
     const { feedback } = req.body;
 
-    const participation = db.findParticipation(studentId, parseInt(eventId));
+    const participation = await db.findParticipation(studentId, parseInt(eventId));
     
     if (participation) {
-      db.updateParticipation(studentId, parseInt(eventId), { feedback });
+      await db.updateParticipation(studentId, parseInt(eventId), { feedback });
       res.status(200).json({ message: 'Feedback submitted' });
     } else {
       res.status(400).json({ message: 'You must join the event first' });

@@ -1,10 +1,10 @@
-import { db } from '../../../lib/db-memory';
+import { db } from '../../../lib/db-postgres';
 import { requireAuth } from '../../../lib/auth';
 
 async function getMyEvents(req, res) {
   try {
-    const participations = db.getStudentParticipations(req.user.id);
-    const allEvents = db.getAllEvents();
+    const participations = await db.getStudentParticipations(req.user.id);
+    const allEvents = await db.getAllEvents();
     
     const eventsData = participations.map(participation => {
       const event = allEvents.find(e => e.id === participation.event_id);

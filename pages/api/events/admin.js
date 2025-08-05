@@ -1,9 +1,9 @@
-import { db } from '../../../lib/db-memory';
+import { db } from '../../../lib/db-postgres';
 import { requireAuth } from '../../../lib/auth';
 
 async function getAdminEvents(req, res) {
   try {
-    const events = db.getEventsByAdmin(req.user.id);
+    const events = await db.getEventsByAdmin(req.user.id);
     res.status(200).json(events);
   } catch (error) {
     console.error('Get admin events error:', error);

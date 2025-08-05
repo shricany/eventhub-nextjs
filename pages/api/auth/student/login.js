@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { verifyPassword, generateToken } from '../../../../lib/auth';
 
 export default async function handler(req, res) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     }
 
     // Find student by email
-    const student = db.findStudentByEmail(email);
+    const student = await db.findStudentByEmail(email);
 
     if (!student) {
       return res.status(401).json({ message: 'Invalid credentials' });

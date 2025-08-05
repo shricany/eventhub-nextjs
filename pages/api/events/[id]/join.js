@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { requireAuth } from '../../../../lib/auth';
 
 async function joinEvent(req, res) {
@@ -7,15 +7,15 @@ async function joinEvent(req, res) {
     const studentId = req.user.id;
     const { participation_type = 'participant' } = req.body;
 
-    const existing = db.findParticipation(studentId, parseInt(eventId));
+    const existing = await db.findParticipation(studentId, parseInt(eventId));
     
     if (existing) {
-      db.updateParticipation(studentId, parseInt(eventId), { 
+      await db.updateParticipation(studentId, parseInt(eventId), { 
         status: 'joined',
         participation_type 
       });
     } else {
-      db.createParticipation({
+      await db.createParticipation({
         student_id: studentId,
         event_id: parseInt(eventId),
         status: 'joined',

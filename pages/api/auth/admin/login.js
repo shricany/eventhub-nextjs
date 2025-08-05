@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { verifyPassword, generateToken } from '../../../../lib/auth';
 
 export default async function handler(req, res) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     }
 
     // Find admin by email
-    const admin = db.findAdminByEmail(email);
+    const admin = await db.findAdminByEmail(email);
 
     if (!admin) {
       return res.status(401).json({ message: 'Invalid credentials' });

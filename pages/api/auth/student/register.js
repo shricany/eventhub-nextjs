@@ -1,4 +1,4 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { hashPassword, generateToken } from '../../../../lib/auth';
 
 export default async function handler(req, res) {
@@ -14,7 +14,8 @@ export default async function handler(req, res) {
     }
 
     // Check if student already exists
-    if (db.findStudentByEmail(email)) {
+    const existingStudent = await db.findStudentByEmail(email);
+    if (existingStudent) {
       return res.status(400).json({ message: 'Student already exists' });
     }
 
@@ -22,7 +23,7 @@ export default async function handler(req, res) {
     const hashedPassword = hashPassword(password);
 
     // Create student
-    const student = db.createStudent({
+    const student = await db.createStudent({
       name,
       email,
       password: hashedPassword,

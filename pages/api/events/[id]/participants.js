@@ -1,10 +1,10 @@
-import { db } from '../../../../lib/db-memory';
+import { db } from '../../../../lib/db-postgres';
 import { requireAuth } from '../../../../lib/auth';
 
 async function getEventParticipants(req, res) {
   try {
     const { id: eventId } = req.query;
-    const participations = db.getEventParticipations(parseInt(eventId));
+    const participations = await db.getEventParticipations(parseInt(eventId));
     
     const interested = [];
     const joined = [];
