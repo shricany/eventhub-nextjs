@@ -59,10 +59,11 @@ async function addComment(req, res, eventId) {
       return res.status(400).json({ message: 'Comment cannot be empty' });
     }
 
-    if (req.user.username) {
-      console.log('ERROR: Admin trying to comment');
-      return res.status(403).json({ message: 'Only students can comment' });
-    }
+    // Allow both students and admins to comment
+    // if (req.user.username) {
+    //   console.log('ERROR: Admin trying to comment');
+    //   return res.status(403).json({ message: 'Only students can comment' });
+    // }
 
     // Validate IDs are numbers
     const validEventId = parseInt(eventId);

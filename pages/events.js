@@ -74,10 +74,14 @@ export default function EventsPage() {
 
   const fetchComments = async (eventId) => {
     try {
+      console.log('Fetching comments for event:', eventId);
       const response = await fetch(`/api/events/comments?eventId=${eventId}`);
       if (response.ok) {
         const eventComments = await response.json();
+        console.log('Comments received:', eventComments);
         setComments(prev => ({ ...prev, [eventId]: eventComments }));
+      } else {
+        console.error('Failed to fetch comments:', response.status);
       }
     } catch (error) {
       console.error('Error fetching comments:', error);
