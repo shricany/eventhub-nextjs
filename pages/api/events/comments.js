@@ -1,5 +1,5 @@
-import { db, initDatabase } from '../../../../../lib/db-postgres';
-import { requireAuth } from '../../../../../lib/auth';
+import { db, initDatabase } from '../../../lib/db-postgres';
+import { requireAuth } from '../../../lib/auth';
 
 let dbInitialized = false;
 
@@ -9,7 +9,8 @@ export default async function handler(req, res) {
     await initDatabase();
     dbInitialized = true;
   }
-  const { id: eventId } = req.query;
+  
+  const { eventId } = req.query;
 
   if (req.method === 'GET') {
     return getComments(req, res, eventId);
@@ -49,11 +50,7 @@ async function addComment(req, res, eventId) {
       comment: comment.trim()
     });
 
-    // Get the comment with user details
-    const comments = await db.getEventComments(parseInt(eventId));
-    const addedComment = comments.find(c => c.id === newComment.id);
-
-    res.status(201).json(addedComment || newComment);
+    res.status(201).json(newComment);
   } catch (error) {
     console.error('Add comment error:', error);
     res.status(500).json({ message: 'Internal server error' });

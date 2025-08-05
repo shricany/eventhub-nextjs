@@ -74,7 +74,7 @@ export default function EventsPage() {
 
   const fetchComments = async (eventId) => {
     try {
-      const response = await fetch(`/api/events/${eventId}/comments`);
+      const response = await fetch(`/api/events/comments?eventId=${eventId}`);
       if (response.ok) {
         const eventComments = await response.json();
         setComments(prev => ({ ...prev, [eventId]: eventComments }));
@@ -106,7 +106,7 @@ export default function EventsPage() {
         return;
       }
 
-      const response = await fetch(`/api/events/${eventId}/comments`, {
+      const response = await fetch(`/api/events/comments?eventId=${eventId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
