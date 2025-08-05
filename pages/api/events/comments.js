@@ -79,6 +79,15 @@ async function addComment(req, res, eventId) {
     console.log('Parsed IDs:', { validEventId, validStudentId });
     console.log('Are NaN?', { eventIdNaN: isNaN(validEventId), studentIdNaN: isNaN(validStudentId) });
 
+    // Safety check to prevent NaN
+    if (isNaN(validEventId) || isNaN(validStudentId)) {
+      console.log('ERROR: NaN detected - eventId:', validEventId, 'studentId:', validStudentId);
+      return res.status(400).json({ 
+        message: 'Invalid IDs detected', 
+        debug: { eventId: validEventId, studentId: validStudentId }
+      });
+    }
+
     console.log('Creating comment with:', {
       event_id: validEventId,
       student_id: validStudentId,
