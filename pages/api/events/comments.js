@@ -51,7 +51,9 @@ async function addComment(req, res, eventId) {
       return res.status(401).json({ message: 'User not authenticated' });
     }
     
-    const studentId = req.user.id;
+    // Try different possible ID fields from JWT
+    const studentId = req.user.id || req.user.student_id || req.user.userId;
+    console.log('Available user fields:', Object.keys(req.user));
     console.log('Student ID:', studentId, 'Type:', typeof studentId);
 
     if (!comment || comment.trim().length === 0) {
