@@ -5,6 +5,9 @@ export default function EventsPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [comments, setComments] = useState({});
+  const [newComment, setNewComment] = useState({});
+  const [showComments, setShowComments] = useState({});
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -66,6 +69,56 @@ export default function EventsPage() {
     } catch (error) {
       console.error('Error joining event:', error);
       alert('Error joining event');
+    }
+  };
+
+  const fetchComments = async (eventId) => {
+    try {
+      const response = await fetch(`/api/events/${eventId}/comments`);
+      if (response.ok) {
+        const eventComments = await response.json();
+        setComments(prev => ({ ...prev, [eventId]: eventComments }));
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
+  const toggleComments = (eventId) => {
+    setShowComments(prev => ({ ...prev, [eventId]: !prev[eventId] }));
+    if (!comments[eventId]) {
+      fetchComments(eventId);
+    }
+  };
+
+  const handleAddComment = async (eventId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const comment = newComment[eventId];
+      
+      if (!comment || comment.trim().length === 0) {
+        alert('Please enter a comment');
+        return;
+      }
+
+      const response = await fetch(`/api/events/${eventId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ comment: comment.trim() })
+      });
+
+      if (response.ok) {
+        setNewComment(prev => ({ ...prev, [eventId]: '' }));
+        fetchComments(eventId);
+      } else {
+        alert('Failed to add comment');
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert('Error adding comment');
     }
   };
 
@@ -160,7 +213,7 @@ export default function EventsPage() {
                   </div>
 
                   {user && !user.username && (
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '15px' }}>
                       <button 
                         onClick={() => handleInterest(event.id)}
                         style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', color: 'white' }}
@@ -173,6 +226,95 @@ export default function EventsPage() {
                       >
                         Join Event
                       </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => toggleComments(event.id)}
+                    style={{ 
+                      width: '100%', 
+                      padding: '10px', 
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+                      color: 'white', 
+                      border: 'none', 
+                      borderRadius: '8px', 
+                      fontWeight: '600', 
+                      cursor: 'pointer',
+                      marginBottom: '10px'
+                    }}
+                  >
+                    💬 {showComments[event.id] ? 'Hide' : 'Show'} Comments ({comments[event.id]?.length || 0})
+                  </button>
+
+                  {showComments[event.id] && (
+                    <div style={{ background: '#f8fafc', padding: '15px', borderRadius: '10px', marginTop: '10px' }}>
+                      {user && !user.username && (
+                        <div style={{ marginBottom: '15px' }}>
+                          <textarea
+                            value={newComment[event.id] || ''}
+                            onChange={(e) => setNewComment(prev => ({ ...prev, [event.id]: e.target.value }))}
+                            placeholder="Add a comment..."
+                            style={{
+                              width: '100%',
+                              padding: '10px',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '8px',
+                              resize: 'vertical',
+                              minHeight: '80px',
+                              fontSize: '14px'
+                            }}
+                          />
+                          <button
+                            onClick={() => handleAddComment(event.id)}
+                            style={{
+                              marginTop: '8px',
+                              padding: '8px 16px',
+                              background: '#10b981',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              fontSize: '14px'
+                            }}
+                          >
+                            Post Comment
+                          </button>
+                        </div>
+                      )}
+                      
+                      <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        {comments[event.id]?.length > 0 ? (
+                          comments[event.id].map((comment, index) => (
+                            <div key={index} style={{ 
+                              background: 'white', 
+                              padding: '12px', 
+                              borderRadius: '8px', 
+                              marginBottom: '10px',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                            }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <span style={{ fontWeight: '600', color: '#1a202c', fontSize: '14px' }}>{comment.name}</span>
+                                  <span style={{ color: '#667eea', fontSize: '12px', background: '#f0f4ff', padding: '2px 8px', borderRadius: '12px' }}>
+                                    {comment.department} - Year {comment.year}
+                                  </span>
+                                </div>
+                                <span style={{ color: '#64748b', fontSize: '12px' }}>
+                                  {new Date(comment.created_at).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <p style={{ margin: 0, color: '#374151', fontSize: '14px', lineHeight: '1.5' }}>
+                                {comment.comment}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <p style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', margin: 0 }}>
+                            No comments yet. Be the first to comment!
+                          </p>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
