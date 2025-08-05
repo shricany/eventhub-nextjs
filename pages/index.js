@@ -130,6 +130,45 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section style={{ padding: '80px 20px', background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1a202c', marginBottom: '20px' }}>
+              Meet the Creator
+            </h2>
+            <p style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '50px' }}>
+              Built with passion for improving campus life
+            </p>
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '50px', flexWrap: 'wrap' }}>
+              <div style={{ textAlign: 'center' }}>
+                <img 
+                  src="/images/founder.jpeg" 
+                  alt="Founder" 
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '5px solid #667eea',
+                    boxShadow: '0 20px 60px rgba(102, 126, 234, 0.3)',
+                    marginBottom: '20px'
+                  }}
+                />
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1a202c', marginBottom: '8px' }}>
+                  Shrikant Davange
+                </h3>
+                <p style={{ color: '#667eea', fontWeight: '600', marginBottom: '15px' }}>
+                  Founder & Developer
+                </p>
+                <p style={{ color: '#64748b', lineHeight: '1.6', maxWidth: '400px' }}>
+                  Computer Science student passionate about creating solutions that bring campus communities together. 
+                  EventHub was born from the vision of making campus events more accessible and engaging for everyone.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="cta">
           <div className="container">
             <div className="cta-content">
