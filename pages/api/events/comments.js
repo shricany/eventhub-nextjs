@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     return getComments(req, res, eventId);
   } else if (req.method === 'POST') {
-    return requireAuth(addComment, 'student')(req, res, eventId);
+    return requireAuth((req, res) => addComment(req, res, eventId), 'student')(req, res);
   } else {
     return res.status(405).json({ message: 'Method not allowed' });
   }
