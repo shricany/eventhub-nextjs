@@ -68,13 +68,13 @@ async function addComment(req, res, eventId) {
 
     console.log('Creating comment with:', {
       event_id: parseInt(eventId),
-      student_id: parseInt(studentId),
+      student_id: studentId,
       comment: comment.trim()
     });
 
     const newComment = await db.createComment({
       event_id: parseInt(eventId),
-      student_id: parseInt(studentId),
+      student_id: studentId,
       comment: comment.trim()
     });
 
