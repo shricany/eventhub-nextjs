@@ -22,6 +22,11 @@ export default function EventsPage() {
       const response = await fetch('/api/events');
       const data = await response.json();
       setEvents(data);
+      
+      // Load comment counts for all events
+      data.forEach(event => {
+        fetchComments(event.id);
+      });
     } catch (error) {
       console.error('Error fetching events:', error);
     }
