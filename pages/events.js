@@ -101,6 +101,11 @@ export default function EventsPage() {
         return;
       }
 
+      if (!token) {
+        alert('Please login to comment');
+        return;
+      }
+
       const response = await fetch(`/api/events/${eventId}/comments`, {
         method: 'POST',
         headers: {
@@ -113,8 +118,10 @@ export default function EventsPage() {
       if (response.ok) {
         setNewComment(prev => ({ ...prev, [eventId]: '' }));
         fetchComments(eventId);
+        alert('Comment added successfully!');
       } else {
-        alert('Failed to add comment');
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to add comment');
       }
     } catch (error) {
       console.error('Error adding comment:', error);
