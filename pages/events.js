@@ -25,6 +25,50 @@ export default function EventsPage() {
     setLoading(false);
   };
 
+  const handleInterest = async (eventId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/events/${eventId}/interest`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        alert('Interest recorded successfully!');
+        fetchEvents();
+      } else {
+        alert('Failed to record interest');
+      }
+    } catch (error) {
+      console.error('Error showing interest:', error);
+      alert('Error showing interest');
+    }
+  };
+
+  const handleJoin = async (eventId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/events/${eventId}/join`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ participation_type: 'participant' })
+      });
+      
+      if (response.ok) {
+        alert('Successfully joined the event!');
+        fetchEvents();
+      } else {
+        alert('Failed to join event');
+      }
+    } catch (error) {
+      console.error('Error joining event:', error);
+      alert('Error joining event');
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -117,10 +161,16 @@ export default function EventsPage() {
 
                   {user && !user.username && (
                     <div style={{ display: 'flex', gap: '12px' }}>
-                      <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', color: 'white' }}>
+                      <button 
+                        onClick={() => handleInterest(event.id)}
+                        style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', color: 'white' }}
+                      >
                         Show Interest
                       </button>
-                      <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}>
+                      <button 
+                        onClick={() => handleJoin(event.id)}
+                        style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '600', borderRadius: '10px', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}
+                      >
                         Join Event
                       </button>
                     </div>
