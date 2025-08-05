@@ -139,15 +139,16 @@ export default function LandingPage() {
               Built with passion for improving campus life
             </p>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '60px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '40px', flexWrap: 'wrap', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
               <div style={{ 
                 position: 'relative',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                padding: '30px',
+                padding: '20px',
                 borderRadius: '25px',
                 boxShadow: '0 30px 80px rgba(102, 126, 234, 0.4)',
                 transform: 'rotate(-2deg)',
-                maxWidth: '400px'
+                maxWidth: '350px',
+                width: '100%'
               }}>
                 <div style={{
                   background: 'white',
@@ -183,12 +184,12 @@ export default function LandingPage() {
                 </div>
               </div>
               
-              <div style={{ textAlign: 'left', maxWidth: '500px' }}>
+              <div style={{ textAlign: 'center', maxWidth: '500px', width: '100%' }}>
                 <div style={{
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  fontSize: '3rem',
+                  fontSize: 'clamp(2rem, 5vw, 3rem)',
                   fontWeight: '900',
                   marginBottom: '10px',
                   lineHeight: '1.1'
@@ -199,8 +200,10 @@ export default function LandingPage() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '10px',
-                  marginBottom: '25px'
+                  marginBottom: '25px',
+                  flexWrap: 'wrap'
                 }}>
                   <span style={{
                     background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
@@ -237,7 +240,8 @@ export default function LandingPage() {
                 <div style={{
                   display: 'flex',
                   gap: '15px',
-                  flexWrap: 'wrap'
+                  flexWrap: 'wrap',
+                  justifyContent: 'center'
                 }}>
                   <div style={{
                     background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
