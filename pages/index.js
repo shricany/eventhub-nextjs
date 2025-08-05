@@ -139,7 +139,7 @@ export default function LandingPage() {
               Built with passion for improving campus life
             </p>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '40px', flexWrap: 'wrap', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '40px', flexWrap: 'wrap' }}>
               <div style={{ 
                 position: 'relative',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
