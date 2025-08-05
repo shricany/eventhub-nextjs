@@ -5,6 +5,10 @@ let dbInitialized = false;
 
 export default async function handler(req, res) {
   // Force database initialization every time to ensure comments table exists
+  console.log('Initializing database for comments API');
+  // log req below
+  console.log('=== COMMENTS API DEBUG ===');
+  console.log('Request:', req);
   try {
     await initDatabase();
     console.log('Database initialized for comments API');
@@ -65,16 +69,15 @@ async function addComment(req, res, eventId) {
     //   return res.status(403).json({ message: 'Only students can comment' });
     // }
 
-    // Validate IDs are numbers
+    // Log actual values without validation
+    console.log('Raw values - eventId:', eventId, 'studentId:', studentId);
+    console.log('Types - eventId:', typeof eventId, 'studentId:', typeof studentId);
+    
     const validEventId = parseInt(eventId);
     const validStudentId = parseInt(studentId);
     
     console.log('Parsed IDs:', { validEventId, validStudentId });
-    
-    if (isNaN(validEventId) || isNaN(validStudentId)) {
-      console.log('ERROR: Invalid IDs - eventId:', validEventId, 'studentId:', validStudentId);
-      return res.status(400).json({ message: 'Invalid event or student ID' });
-    }
+    console.log('Are NaN?', { eventIdNaN: isNaN(validEventId), studentIdNaN: isNaN(validStudentId) });
 
     console.log('Creating comment with:', {
       event_id: validEventId,
