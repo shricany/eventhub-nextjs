@@ -67,14 +67,14 @@ async function addComment(req, res, eventId) {
     // Skip validation for now - just create comment
 
     console.log('Creating comment with:', {
-      event_id: eventId,
-      student_id: studentId,
+      event_id: parseInt(eventId),
+      student_id: parseInt(studentId),
       comment: comment.trim()
     });
 
     const newComment = await db.createComment({
-      event_id: eventId,
-      student_id: studentId,
+      event_id: parseInt(eventId),
+      student_id: parseInt(studentId),
       comment: comment.trim()
     });
 
